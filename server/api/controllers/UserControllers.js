@@ -1,6 +1,7 @@
 import User from "../models/UserModels.js";
 import sendJWT from "../utils/SendJWT.js";
 import sendMail from "../utils/SendMail.js";
+import bcrypt from "bcryptjs";
 
 const createUser = async (req, res) => {
   const { fullName, email, password, address } = req.body;
@@ -27,12 +28,16 @@ const createUser = async (req, res) => {
 
 const Login = async (req, res) => {
   const { email, password } = req.body;
-  const loginUser = await User.findOne({ email, password });
+  const loginUser = await User.findOne({ email });
   if (!loginUser) {
     return res.status(404).json({ message: "Invalid Credentials" });
   } else {
     if (loginUser.status === "Pending") {
       return res.status(400).json({ message: "Verify Your Email" });
+    }
+    const isMatch = await bcrypt.compare(password, loginUser.password);
+    if (!isMatch) {
+      return res.status(406).json({ message: "Please enter correct password" });
     }
     sendJWT(loginUser, 200, res, "Successfully Login");
   }

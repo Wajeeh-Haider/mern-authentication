@@ -12,8 +12,10 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login } from "../actions";
+import { useSelector } from "react-redux";
 
 const SignIn = () => {
+  const isLogged = useSelector((state) => state.authReducer);
   const Navigate = useNavigate();
   const dispatch = useDispatch();
   const [Input, setInput] = React.useState({
@@ -47,6 +49,8 @@ const SignIn = () => {
         toast.error("Invalid Credentials! Sign Up to Continue :)");
       } else if (error?.response?.status === 400) {
         toast.error("Please Verify Your Email");
+      } else if (error?.response?.status === 406) {
+        toast.error("Please Enter Correct Password");
       } else {
         toast.error("Something Went Wrong");
       }
@@ -71,6 +75,10 @@ const SignIn = () => {
     boxShadow: 24,
     p: 4,
   };
+
+  React.useEffect(() => {
+    isLogged.isAuthenticated ? Navigate("/home") : Navigate("/");
+  }, [isLogged]);
 
   return (
     <>
