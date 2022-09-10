@@ -20,6 +20,7 @@ const HomePage = () => {
         credentials: "include",
       })
       .catch((err) => {
+        Navigate("/timeout");
         dispatch(logout());
         console.log(err);
       });
@@ -34,9 +35,9 @@ const HomePage = () => {
         credentials: "include",
       })
       .catch((err) => {
-        dispatch(logout());
         Navigate("/timeout");
-        
+        dispatch(logout());
+
         console.log(err);
       });
     if (!res) return Navigate("/");
