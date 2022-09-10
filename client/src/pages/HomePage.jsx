@@ -4,11 +4,14 @@ import MainHero from "../components/MainHero";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../actions";
 axios.defaults.withCredentials = true;
 
 const HomePage = () => {
   const [users, setUser] = React.useState();
   const Navigate = useNavigate();
+  const dispatch = useDispatch();
   let firstRender = true;
   const sendRequests = async () => {
     const res = await axios
@@ -17,9 +20,9 @@ const HomePage = () => {
         credentials: "include",
       })
       .catch((err) => {
+        dispatch(logout());
         console.log(err);
       });
-    if (!res) return Navigate("/");
     const data = await res.data;
     return data;
   };
@@ -31,6 +34,9 @@ const HomePage = () => {
         credentials: "include",
       })
       .catch((err) => {
+        dispatch(logout());
+        Navigate("/timeout");
+        
         console.log(err);
       });
     if (!res) return Navigate("/");

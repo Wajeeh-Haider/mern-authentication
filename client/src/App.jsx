@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import "animate.css";
 import Error from "./pages/Error";
 import SignupPage from "./pages/SignupPage";
+import SessionTimeout from "./pages/SessionTimeout";
 
 const App = () => {
   const isLogged = useSelector((state) => state.authReducer);
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/home" element={<HomePage />} />
         ) : null}
         <Route path="/sign-up" element={<SignupPage />} />
+        <Route path="/timeout" element={<SessionTimeout />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </>

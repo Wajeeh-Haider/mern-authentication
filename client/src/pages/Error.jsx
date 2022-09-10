@@ -19,7 +19,10 @@ const Error = () => {
           style={{ minHeight: "80vh" }}
         >
           <Typography>Error 404 Page Not Found</Typography>
-          <Link to={isLogged.isAuthenticated ? "/home" : "/"}>
+          <Link
+            to={isLogged.isAuthenticated ? "/home" : "/"}
+            style={{ textDecoration: "none" }}
+          >
             <Button
               variant="contained"
               color="primary"

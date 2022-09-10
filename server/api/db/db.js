@@ -10,7 +10,7 @@ mongoose
     }
   )
   .then(() => {
-    console.log("db connectd");
+    console.log("db connected");
   })
   .catch((err) => {
     console.log("db not connected", err);
