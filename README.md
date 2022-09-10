@@ -51,7 +51,7 @@ For gmail smtp server you can watch this video https://www.youtube.com/watch?v=1
 
 - Email Verification
 - JWT Access Token
-- Complete Security
+- Password Encrypition
 - JWT Refresh Token
 - Cross platform
 
