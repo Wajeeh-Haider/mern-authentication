@@ -39,12 +39,12 @@ To run this project, you will need to add the following environment variables to
 For gmail smtp server you can watch this video https://www.youtube.com/watch?v=1YXVdyVuFGA
 
 `PORT` 
-`DB_URL`
+`DB_USER`
+`DB_PASSWORD`
+`DB_NAME`
 `JWT_SECRET`
-`SMTP_SERVER`
 `SMTP_USER`
 `SMTP_PASSWORD`
-`SMTP_PORT`
 
 
 ## Features
