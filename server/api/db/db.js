@@ -4,7 +4,7 @@ dotenv.config();
 
 mongoose
   .connect(
-    "mongodb+srv://MERNAUTH:MERNAUTH1122@cluster0.twlrv3h.mongodb.net/?retryWrites=true&w=majority",
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_NAME}?retryWrites=true&w=majority`,
     {
       useNewUrlParser: true,
     }
