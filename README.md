@@ -53,7 +53,7 @@ For gmail smtp server you can watch this video https://www.youtube.com/watch?v=1
 - JWT Access Token
 - Password Encrypition
 - JWT Refresh Token
-- Cross platform
+- State Persistence
 
 
 ## Demo
