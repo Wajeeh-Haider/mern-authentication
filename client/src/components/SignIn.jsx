@@ -7,7 +7,7 @@ import {
   TextField,
   Box,
 } from "@mui/material";
-
+import validator from "validator";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -22,7 +22,6 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-
   const handleInput = (e) => {
     return setInput({ ...Input, [e.target.name]: e.target.value });
   };
@@ -32,6 +31,9 @@ const SignIn = () => {
       const { email, password } = Input;
       if (email === "" || password === "") {
         toast.error("Please Fill All The Fields");
+        if (!validator.isEmail(email)) {
+          toast.error("Please Enter Valid Email");
+        }
       } else {
         await axios
           .post("http://127.0.0.1:4000/login", {
@@ -80,7 +82,6 @@ const SignIn = () => {
   React.useEffect(() => {
     isLogged.isAuthenticated ? Navigate("/home") : Navigate("/");
   }, [isLogged]);
-
   return (
     <>
       <Toaster toastOptions={{ position: "top-right" }} gutter={8} />

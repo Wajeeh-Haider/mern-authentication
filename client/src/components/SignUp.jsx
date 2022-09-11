@@ -11,37 +11,52 @@ const SignUp = () => {
     password: "",
     address: "",
   });
-
+  const [error, setError] = React.useState({
+    fullNameError: "",
+    emailError: "",
+    passwordError: "",
+    addressError: "",
+  });
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { fullName, email, password, address } = Input;
-    try {
-      const response = await axios.post("http://127.0.0.1:4000/create/user/", {
-        fullName,
-        email,
-        password,
-        address,
-      });
-      if (response.status === 201) {
-        toast.success("You are Registered Successfully");
-        setInput({
-          fullName: "",
-          email: "",
-          password: "",
-          address: "",
+    console.log(password.length);
+    if (fullName === "" || email === "" || password === "" || address === "") {
+      toast.error("Please Fill All The Fields");
+    } else {
+      await axios
+        .post("http://127.0.0.1:4000/create/user/", {
+          fullName,
+          email,
+          password,
+          address,
+        })
+        .then((response) => {
+          if (response.status === 201) {
+            toast.success("You are Registered Successfully");
+            setInput({
+              fullName: "",
+              email: "",
+              password: "",
+              address: "",
+            });
+          }
+        })
+        .catch((error) => {
+          if (error.response.status === 400) {
+            toast.error(
+              "User Already Exists Please Sign Up with Another Email"
+            );
+          } else {
+            toast.error("Something Went Wrong");
+          }
         });
-      }
-    } catch (error) {
-      if (error.response.status === 400) {
-        toast.error("User Already Exists Please Sign Up with Another Email");
-      } else {
-        toast.error("Something Went Wrong");
-      }
     }
   };
   const handleInput = (e) => {
     return setInput({ ...Input, [e.target.name]: e.target.value });
   };
+
   return (
     <>
       <Container fixed>
@@ -89,6 +104,7 @@ const SignUp = () => {
               autoFocus
               onChange={handleInput}
               value={Input.email}
+              helperText={error.emailError == "" ? "" : error.emailError}
             />
             <TextField
               margin="normal"
