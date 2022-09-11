@@ -5,6 +5,8 @@ const UserSchema = mongoose.Schema({
   fullName: {
     type: String,
     require: true,
+    // add validation for fullName
+    
   },
   email: {
     type: String,
@@ -38,7 +40,7 @@ UserSchema.methods.jwtSign = function () {
     },
     process.env.JWT_SECRET,
     {
-      expiresIn: "5m",
+      expiresIn: "30s",
     }
   );
 };

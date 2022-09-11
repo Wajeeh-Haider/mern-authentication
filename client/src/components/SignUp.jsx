@@ -14,7 +14,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { email, password, address, fullName } = Input;
+    const { fullName, email, password, address } = Input;
     try {
       const response = await axios.post("http://127.0.0.1:4000/create/user/", {
         fullName,
@@ -76,7 +76,7 @@ const SignUp = () => {
               autoComplete="fullName"
               autoFocus
               onChange={handleInput}
-              value={Input.name}
+              value={Input.fullName}
             />
             <TextField
               margin="normal"

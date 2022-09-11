@@ -6,6 +6,7 @@ import "animate.css";
 import Error from "./pages/Error";
 import SignupPage from "./pages/SignupPage";
 import SessionTimeout from "./pages/SessionTimeout";
+import VerifyEmail from "./pages/VerifyEmail";
 
 const App = () => {
   const isLogged = useSelector((state) => state.authReducer);
@@ -18,6 +19,7 @@ const App = () => {
         ) : null}
         <Route path="/sign-up" element={<SignupPage />} />
         <Route path="/timeout" element={<SessionTimeout />} />
+        <Route path="/verify/:verifyId" element={<VerifyEmail />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </>

@@ -7,12 +7,12 @@ import {
   TextField,
   Box,
 } from "@mui/material";
+
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../actions";
-import { useSelector } from "react-redux";
 
 const SignIn = () => {
   const isLogged = useSelector((state) => state.authReducer);
@@ -29,13 +29,14 @@ const SignIn = () => {
 
   const SigninRequest = async () => {
     try {
-      if (Input.email === "" || Input.password === "") {
+      const { email, password } = Input;
+      if (email === "" || password === "") {
         toast.error("Please Fill All The Fields");
       } else {
         await axios
           .post("http://127.0.0.1:4000/login", {
-            email: Input.email,
-            password: Input.password,
+            email,
+            password,
           })
           .then((response) => {
             if (response.status === 200) {

@@ -3,7 +3,7 @@ const sendJWT = (user, statusCode, res, status) => {
 
   const options = {
     httpOnly: true,
-    expires: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes
+    expires: new Date(Date.now() + 30 * 1000), // 30 seconds
     secure: true,
     sameSite: "none",
   };

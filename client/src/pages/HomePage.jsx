@@ -52,7 +52,7 @@ const HomePage = () => {
     }
     let interval = setInterval(() => {
       refreshToken().then((data) => setUser(data.user));
-    }, 1000 * 60 * 29); // 29 minutes
+    }, 29 * 1000); // 29 seconds
     return () => clearInterval(interval);
   }, []);
 

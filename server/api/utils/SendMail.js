@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 const sendMail = (makeUser) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: "smtp.gmail.com", 
       port: 25,
       secure: false,
       auth: {
@@ -16,7 +16,7 @@ const sendMail = (makeUser) => {
       to: makeUser.email,
       subject: "Verify Your Email",
       text: "Please Verify Your Email",
-      html: `<p>Hello click here to verify your email http://127.0.0.1:4000/api/verify/${makeUser._id} </p>`,
+      html: `<p>Hello click here to verify your email  http://127.0.0.1:5173/verify/${makeUser._id} </p>`,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {

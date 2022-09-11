@@ -70,6 +70,7 @@ const Logout = (req, res) => {
     httpOnly: true,
     expire: new Date(Date.now()),
   });
+  res.clearCookie("token");
   res.status(200).json({
     status: true,
     message: "User Logout",
