@@ -12,7 +12,7 @@ verification and JWT Auth Token. Add redux to make our site more secure and also
 Clone the project
 
 ```bash
-  git clone https://github.com/Wajeeh-Haider/MERN-Complete-Authentication
+  git clone https://github.com/Wajeeh-Haider/mern-authentication
 ```
 
 Setup Client's Directory
