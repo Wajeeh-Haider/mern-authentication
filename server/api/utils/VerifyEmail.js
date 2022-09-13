@@ -5,13 +5,16 @@ const verifyEmail = async (req, res) => {
   const user = await User.findById(verifyId);
 
   if (user) {
-    if (user.status === "Active")
+    if (user.status === "Active") {
       return res.status(400).json({ message: "Email Already Verified" });
+    }
     user.status = "Active";
     await user.save();
     return res.status(200).json({ message: "Email Verified" });
   }
-  return res.status(400).json({ message: "Something went wrong" });
+  return res
+    .status(400)
+    .json({ message: "Sorry! We cannot verify your email" });
 };
 
 export default verifyEmail;

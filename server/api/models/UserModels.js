@@ -5,16 +5,18 @@ const UserSchema = mongoose.Schema({
   fullName: {
     type: String,
     require: true,
-    // add validation for fullName
-    
+    min: 3,
+    max: 255,
   },
   email: {
     type: String,
     require: true,
+    unique: true,
   },
   password: {
     type: String,
     require: true,
+    min: 6,
   },
   address: {
     type: String,

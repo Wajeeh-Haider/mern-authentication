@@ -13,7 +13,7 @@ const VerifyEmail = () => {
 
   const checkMail = async () => {
     await axios
-      .get(`/api/verify/${verifyId}`)
+      .get(`http://127.0.0.1:4000/api/verify/${verifyId}`)
       .then(() => {
         Navigate("/");
         toast.success("Your Email is Verified");
@@ -31,8 +31,6 @@ const VerifyEmail = () => {
 
     renderAfterCalled.current = true;
   }, [verifyId]);
-
-  return null;
 };
 
 export default VerifyEmail;

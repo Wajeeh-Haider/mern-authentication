@@ -13,6 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../actions";
+import { ValidationGroup, Validate, AutoDisabler } from "mui-validate";
 
 const SignIn = () => {
   const isLogged = useSelector((state) => state.authReducer);
@@ -98,55 +99,77 @@ const SignIn = () => {
           <Typography component="h1" variant="h4">
             Sign in
           </Typography>
-          <Box
-            component="form"
-            marginTop="8"
-            onSubmit={handleSubmit}
-            sx={{ mt: 1 }}
-          >
-            <TextField
-              margin="normal"
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              type="email"
-              value={Input.email}
-              onChange={handleInput}
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              id="password"
-              label="Password"
-              name="password"
-              type="password"
-              value={Input.password}
-              onChange={handleInput}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+          <ValidationGroup>
+            <Box
+              component="form"
+              marginTop="8"
+              onSubmit={handleSubmit}
+              sx={{ mt: 1 }}
             >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Button variant="outlined" onClick={forgetPassword}>
-                  Forgot password?
+              <Validate
+                name="email"
+                required={[true, "Email is required"]}
+                regex={[
+                  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  "Please enter a valid email",
+                ]}
+              >
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  type="email"
+                  value={Input.email}
+                  onChange={handleInput}
+                />
+              </Validate>
+              <Validate
+                name="password"
+                required={[true, "Password is required"]}
+                custom={[
+                  (value) => value.length >= 6,
+                  "password must be at least 6 characters",
+                ]}
+              >
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  id="password"
+                  label="Password"
+                  name="password"
+                  type="password"
+                  value={Input.password}
+                  onChange={handleInput}
+                />
+              </Validate>
+              <AutoDisabler>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign In
                 </Button>
-              </Grid>
-              <Grid item>
-                <Link to="/sign-up" style={{ textDecoration: "none" }}>
-                  <Button variant="outlined">
-                    {"Don't have an account? Sign Up"}
+              </AutoDisabler>
+              <Grid container>
+                <Grid item xs>
+                  <Button variant="outlined" onClick={forgetPassword}>
+                    Forgot password?
                   </Button>
-                </Link>
+                </Grid>
+                <Grid item>
+                  <Link to="/sign-up" style={{ textDecoration: "none" }}>
+                    <Button variant="outlined">
+                      {"Don't have an account? Sign Up"}
+                    </Button>
+                  </Link>
+                </Grid>
               </Grid>
-            </Grid>
-          </Box>
+            </Box>
+          </ValidationGroup>
         </Box>
       </Container>
     </>
