@@ -13,7 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../actions";
-import { ValidationGroup, Validate, AutoDisabler } from "mui-validate";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const SignIn = () => {
   const isLogged = useSelector((state) => state.authReducer);
@@ -23,6 +23,11 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+  const matches = useMediaQuery("(min-width:1200px)");
+  const query = useMediaQuery("(min-width:346px)");
+
+  matches ? console.log(true) : console.log(false);
+
   const handleInput = (e) => {
     return setInput({ ...Input, [e.target.name]: e.target.value });
   };
@@ -69,108 +74,105 @@ const SignIn = () => {
     toast.success("This feature will be added soon");
   };
 
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 4,
-  };
-
   React.useEffect(() => {
     isLogged.isAuthenticated ? Navigate("/home") : Navigate("/");
   }, [isLogged]);
   return (
     <>
       <Toaster toastOptions={{ position: "top-right" }} gutter={8} />
-
       <Container fixed>
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
+        <Typography
+          component="h1"
+          variant="h3"
+          sx={{ textAlign: "center", marginTop: "50px", marginBottom: "30px" }}
         >
-          <Typography component="h1" variant="h4">
-            Sign in
-          </Typography>
-          <ValidationGroup>
-            <Box
-              component="form"
-              marginTop="8"
-              onSubmit={handleSubmit}
-              sx={{ mt: 1 }}
+          Sign in
+        </Typography>
+        <Grid
+          container
+          spacing={2}
+          justifyContent="center"
+          alignItems="center"
+          sx={{ height: "60vh" }}
+          xs={{ direction: "row-reverse" }}
+        >
+          <Grid item sm={12} xs={12} md={6}>
+            <img
+              src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8bGFwdG9wfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+              alt="Image"
+              width="100%"
+              style={{ borderRadius: "10px" }}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={12}
+            xs={12}
+            md={6}
+            component="form"
+            onSubmit={handleSubmit}
+          >
+            <TextField
+              margin="normal"
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              type="email"
+              value={Input.email}
+              onChange={handleInput}
+            />
+
+            <TextField
+              margin="normal"
+              fullWidth
+              id="password"
+              label="Password"
+              name="password"
+              type="password"
+              value={Input.password}
+              onChange={handleInput}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
             >
-              <Validate
-                name="email"
-                required={[true, "Email is required"]}
-                regex={[
-                  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                  "Please enter a valid email",
-                ]}
+              Sign In
+            </Button>
+
+            <Grid
+              container
+              justifyContent={!matches ? "center" : "space-between"}
+            >
+              <Grid
+                item
+                sx={{
+                  marginTop: !matches ? "20px" : "0px",
+                  marginRight: !matches ? "10px" : "0px",
+                }}
               >
-                <TextField
-                  margin="normal"
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  type="email"
-                  value={Input.email}
-                  onChange={handleInput}
-                />
-              </Validate>
-              <Validate
-                name="password"
-                required={[true, "Password is required"]}
-                custom={[
-                  (value) => value.length >= 6,
-                  "password must be at least 6 characters",
-                ]}
-              >
-                <TextField
-                  margin="normal"
-                  fullWidth
-                  id="password"
-                  label="Password"
-                  name="password"
-                  type="password"
-                  value={Input.password}
-                  onChange={handleInput}
-                />
-              </Validate>
-              <AutoDisabler>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Sign In
+                <Button variant="outlined" onClick={forgetPassword}>
+                  Forgot password?
                 </Button>
-              </AutoDisabler>
-              <Grid container>
-                <Grid item xs>
-                  <Button variant="outlined" onClick={forgetPassword}>
-                    Forgot password?
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Link to="/sign-up" style={{ textDecoration: "none" }}>
-                    <Button variant="outlined">
-                      {"Don't have an account? Sign Up"}
-                    </Button>
-                  </Link>
-                </Grid>
               </Grid>
-            </Box>
-          </ValidationGroup>
-        </Box>
+              <Grid
+                item
+                sx={{
+                  marginTop: !matches ? "20px" : "0px",
+                  marginLeft: !matches ? "10px" : "0px",
+                }}
+              >
+                <Link to="/sign-up" style={{ textDecoration: "none" }}>
+                  <Button variant="outlined" size={!query ? "small" : ""}>
+                    {"Don't have an account? Sign Up"}
+                  </Button>
+                </Link>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </Container>
     </>
   );

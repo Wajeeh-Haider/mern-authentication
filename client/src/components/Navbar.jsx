@@ -6,11 +6,15 @@ import {
   Typography,
   Button,
   IconButton,
+  MenuItem,
+  Menu,
 } from "@mui/material";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../actions/index";
+import FeedIcon from "@mui/icons-material/Feed";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 
 export default function Navbar({ users }) {
   const dispatch = useDispatch();
@@ -35,24 +39,68 @@ export default function Navbar({ users }) {
       console.log(error);
     }
   };
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar
+        position="relative"
+        style={{ position: "relative", top: 0, left: 0, margin: 0, zIndex: 1 }}
+      >
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          ></IconButton>
+          <IconButton size="large" color="inherit">
+            <FeedIcon />
+          </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
+            <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
+              Mern Auth
+            </Link>
           </Typography>
-          <Button color="inherit" onClick={logoutRequest}>
+
+          {/* <Button color="inherit" onClick={logoutRequest}>
             Logout
-          </Button>
+          </Button> */}
+          <div>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={(event) => setAnchorEl(event.currentTarget)}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>
+                <Link
+                  to="/me"
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  Profile
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={logoutRequest}>Logout</MenuItem>
+            </Menu>
+          </div>
         </Toolbar>
       </AppBar>
     </Box>

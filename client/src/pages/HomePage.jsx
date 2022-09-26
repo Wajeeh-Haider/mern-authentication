@@ -55,7 +55,7 @@ const HomePage = () => {
     }, 29 * 1000); // 29 seconds
     return () => clearInterval(interval);
   }, []);
-
+console.log(users);
   return (
     <>
       <Navbar users={users} />
