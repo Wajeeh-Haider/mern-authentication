@@ -1,12 +1,17 @@
-import React from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Button, Grid, Typography, TextField, Container } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import validator from "validator";
+import { SignUpUser } from "../actions";
+import { useDispatch, useSelector } from "react-redux";
+import ReactLoading from "react-loading";
 
 const SignUp = () => {
   const Navigate = useNavigate();
+  const dispatch = useDispatch();
+  const signUp = useSelector((state) => state.signupReducer);
+  const { loading } = signUp;
   const [Input, setInput] = React.useState({
     fullName: "",
     email: "",
@@ -22,40 +27,28 @@ const SignUp = () => {
     } else if (!validator.isEmail(email)) {
       toast.error("Please Enter Valid Email");
     } else {
-      await axios
-        .post("http://127.0.0.1:4000/create/user/", {
-          fullName,
-          email,
-          password,
-          address,
-        })
-        .then((response) => {
-          if (response.status === 201) {
-            toast.success("You are Registered Successfully");
-            setInput({
-              fullName: "",
-              email: "",
-              password: "",
-              address: "",
-            });
-            Navigate("/");
-          }
-        })
-        .catch((error) => {
-          if (error.response.status === 400) {
-            toast.error(
-              "User Already Exists Please Sign Up with Another Email"
-            );
-          } else {
-            toast.error("Something Went Wrong");
-          }
-        });
+      dispatch(SignUpUser(fullName, email, password, address));
+      if (dispatch({ type: "SIGNUP_SUCCESS" })) {
+        Navigate("/");
+      }
     }
   };
 
   const handleInput = (e) => {
     setInput({ ...Input, [e.target.name]: e.target.value });
   };
+
+  if (loading) {
+    return (
+      <ReactLoading
+        type="bubbles"
+        color="#1976D2"
+        height="5%"
+        width="5%"
+        className="loader"
+      />
+    );
+  }
 
   return (
     <>

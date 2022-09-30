@@ -8,7 +8,7 @@ const refreshJwtToken = async (
   const token = newToken;
   const options = {
     httpOnly: true,
-    expires: new Date(Date.now() + 60 * 1000), // 60 seconds
+    expires: new Date(Date.now() + 10 * 1000), // 10 seconds
     secure: true,
     sameSite: "none",
   };

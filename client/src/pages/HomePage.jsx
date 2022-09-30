@@ -1,64 +1,56 @@
 import React from "react";
 import Cards from "../components/Cards";
 import MainHero from "../components/MainHero";
-import Navbar from "../components/Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { logout } from "../actions";
+import { useDispatch, useSelector } from "react-redux";
+import { accessToken, getDataAndRefreshToken, logout } from "../actions";
+import ReactLoading from "react-loading";
 axios.defaults.withCredentials = true;
 
 const HomePage = () => {
   const [users, setUser] = React.useState();
-  const Navigate = useNavigate();
+  const myInfo = useSelector((state) => state.myInfoReducer);
+  const myInfoRefresh = useSelector((state) => state.refreshTokenReducer);
   const dispatch = useDispatch();
-  let firstRender = true;
-  const sendRequests = async () => {
-    const res = await axios
-      .get("http://127.0.0.1:4000/api/getmyinfo", {
-        withCredentials: true,
-        credentials: "include",
-      })
-      .catch((err) => {
-        Navigate("/timeout");
-        dispatch(logout());
-        console.log(err);
-      });
-    const data = await res.data;
-    return data;
+  let firstRenders = true;
+
+  const sendRequests = () => {
+    dispatch(accessToken());
+    setUser(myInfo?.myData?.user);
   };
 
-  const refreshToken = async () => {
-    const res = await axios
-      .get("http://127.0.0.1:4000/api/refresh", {
-        withCredentials: true,
-        credentials: "include",
-      })
-      .catch((err) => {
-        Navigate("/timeout");
-        dispatch(logout());
-
-        console.log(err);
-      });
-    if (!res) return Navigate("/");
-    const data = await res.data;
-    return data;
+  const refreshToken = () => {
+    dispatch(getDataAndRefreshToken());
+    setUser(myInfoRefresh.myData.user);
   };
 
   React.useEffect(() => {
-    if (firstRender) {
-      firstRender = false;
-      sendRequests().then((data) => setUser(data.user));
+    if (firstRenders) {
+      firstRenders = false;
+      sendRequests();
     }
+  }, []);
+
+  React.useEffect(() => {
     let interval = setInterval(() => {
-      refreshToken().then((data) => setUser(data.user));
-    }, 29 * 1000); // 29 seconds
+      refreshToken();
+    }, 4 * 1000);
     return () => clearInterval(interval);
   }, []);
-console.log(users);
+
+  if (!users)
+    return (
+      <ReactLoading
+        type="bubbles"
+        color="#1976D2"
+        height="5%"
+        width="5%"
+        className="loader"
+      />
+    );
   return (
     <>
-      <Navbar users={users} />
       <MainHero users={users} />
       <Cards />
     </>

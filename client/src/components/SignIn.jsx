@@ -1,73 +1,41 @@
 import React from "react";
-import {
-  Container,
-  Button,
-  Grid,
-  Typography,
-  TextField,
-  Box,
-} from "@mui/material";
+import { Container, Button, Grid, Typography, TextField } from "@mui/material";
 import validator from "validator";
+import ReactLoading from "react-loading";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../actions";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { SigninRequest } from "../actions";
 
 const SignIn = () => {
-  const isLogged = useSelector((state) => state.authReducer);
-  const Navigate = useNavigate();
-  const dispatch = useDispatch();
   const [Input, setInput] = React.useState({
     email: "",
     password: "",
   });
+  const dispatch = useDispatch();
+  const Navigate = useNavigate();
+  const isLogged = useSelector((state) => state.authReducer);
+  const userLogin = useSelector((state) => state.loginReducer);
+  const { loading } = userLogin;
+
   const matches = useMediaQuery("(min-width:1200px)");
   const query = useMediaQuery("(min-width:346px)");
-
-  matches ? console.log(true) : console.log(false);
 
   const handleInput = (e) => {
     return setInput({ ...Input, [e.target.name]: e.target.value });
   };
 
-  const SigninRequest = async () => {
-    try {
-      const { email, password } = Input;
-      if (email === "" || password === "") {
-        toast.error("Please Fill All The Fields");
-        if (!validator.isEmail(email)) {
-          toast.error("Please Enter Valid Email");
-        }
-      } else {
-        await axios
-          .post("http://127.0.0.1:4000/login", {
-            email,
-            password,
-          })
-          .then((response) => {
-            if (response.status === 200) {
-              dispatch(login());
-              Navigate("/home");
-            }
-          });
-      }
-    } catch (error) {
-      if (error?.response?.status === 404) {
-        toast.error("Invalid Credentials! Sign Up to Continue :)");
-      } else if (error?.response?.status === 400) {
-        toast.error("Please Verify Your Email");
-      } else if (error?.response?.status === 406) {
-        toast.error("Please Enter Correct Password");
-      } else {
-        toast.error("Something Went Wrong");
-      }
-    }
-  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    SigninRequest();
+    const { email, password } = Input;
+    if (email === "" || password === "") {
+      toast.error("Please Fill All The Fields");
+    } else if (!validator.isEmail(email)) {
+      toast.error("Please Enter Valid Email");
+    } else {
+      dispatch(SigninRequest(email, password));
+    }
   };
 
   const forgetPassword = () => {
@@ -77,6 +45,7 @@ const SignIn = () => {
   React.useEffect(() => {
     isLogged.isAuthenticated ? Navigate("/home") : Navigate("/");
   }, [isLogged]);
+
   return (
     <>
       <Toaster toastOptions={{ position: "top-right" }} gutter={8} />

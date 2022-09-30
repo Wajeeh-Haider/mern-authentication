@@ -6,9 +6,11 @@ const isAuthenticated = async (req, res, next) => {
   const { token } = req.cookies;
   const cookie = req.cookies.name;
   if (!cookie === "token" || !token) {
-    return res.status(400).json({ message: "Un-authorized access" });
+    return res.status(400).json({ message: "Un-authasasasasorized access" });
   }
-  const decodeToken = jwt.verify(token, process.env.JWT_SECRET);
+  const decodeToken = jwt.verify(token, "AUTHENTICATIONUSINGJWT", {
+    ignoreExpiration: true,
+  });
   const loggedInUser = await User.findById(decodeToken.id);
   req.user = loggedInUser;
   next();
@@ -19,38 +21,36 @@ const refreshToken = async (req, res, next) => {
   const { token } = req.cookies;
   const cookie = req.cookies.name;
   if (!cookie === "token" || !token) {
-    return res.status(400).json({ message: "Un-authorized access" });
+    return res.status(400).json({ message: "Un-authorized access W" });
   }
-  jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
-    if (err) {
-      return res.status(400).json({ message: "Cannot Verify Token" });
-    }
-    const loggedInUser = await User.findById(user.id);
-    res.clearCookie("token");
-
-    const newToken = jwt.sign(
-      {
-        id: loggedInUser._id,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "60s",
-      }
-    );
-    if (newToken) {
-      return refreshJwtToken(
-        { userData: loggedInUser },
-        200,
-        res,
-        "Refresh Token",
-        newToken
-      );
-    } else {
-      res.status(400).json({ message: "Invalid Credentials" });
-    }
-    req.user = loggedInUser;
-    next();
+  const decodeToken = jwt.verify(token, "AUTHENTICATIONUSINGJWT", {
+    ignoreExpiration: true,
   });
+  const loggedInUser = await User.findById(decodeToken.id);
+  res.clearCookie("token");
+
+  const newToken = jwt.sign(
+    {
+      id: String(loggedInUser._id),
+    },
+    "AUTHENTICATIONUSINGJWT",
+    {
+      expiresIn: "10s", // 10 seconds
+    }
+  );
+  if (newToken) {
+    return refreshJwtToken(
+      { userData: loggedInUser },
+      200,
+      res,
+      "Refresh Token",
+      newToken
+    );
+  } else {
+    res.status(400).json({ message: "Invalid Credentials" });
+  }
+  req.user = loggedInUser;
+  next();
 };
 
 export { isAuthenticated, refreshToken };

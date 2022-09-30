@@ -8,22 +8,30 @@ import SignupPage from "./pages/SignupPage";
 import SessionTimeout from "./pages/SessionTimeout";
 import VerifyEmail from "./pages/VerifyEmail";
 import MyProfile from "./pages/MyProfile";
+import "./App.css";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   const isLogged = useSelector((state) => state.authReducer);
   return (
     <>
+      {isLogged.isAuthenticated ? (
+        <>
+          <Navbar />
+        </>
+      ) : null}
       <Routes>
-        <Route path="/" element={<SignIn />} />
         {isLogged.isAuthenticated ? (
           <>
             <Route path="/home" element={<HomePage />} />
             <Route path="/me" element={<MyProfile />} />
           </>
         ) : null}
+        <Route path="/" element={<SignIn />} />
         <Route path="/sign-up" element={<SignupPage />} />
         <Route path="/timeout" element={<SessionTimeout />} />
         <Route path="/verify/:verifyId" element={<VerifyEmail />} />
+
         <Route path="*" element={<Error />} />
       </Routes>
     </>

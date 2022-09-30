@@ -19,11 +19,11 @@ const createUser = async (req, res) => {
   if (makeUser) {
     await makeUser.save();
     sendMail(makeUser);
-    return res
-      .status(201)
-      .json({ message: "Data Entered Successfully", data: makeUser });
+    return res.status(201).json({ message: "Data Entered Successfully" });
   }
-  return res.status(400).json({ message: "Data Does Not Successfully" });
+  return res
+    .status(400)
+    .json({ message: "Data Does Not Entered Successfully" });
 };
 
 const Login = async (req, res) => {
@@ -45,7 +45,7 @@ const Login = async (req, res) => {
 
 const getMyInfo = async (req, res) => {
   const id = req.user._id;
-  const user = await User.findById(id, "-password");
+  const user = await User.findById(id);
   if (user) {
     return res.status(200).json({ user });
   }

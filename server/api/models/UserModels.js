@@ -30,7 +30,7 @@ const UserSchema = mongoose.Schema({
 
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-  const salt = await bcrypt.genSalt(6);
+  const salt = await bcrypt.genSalt(8);
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
@@ -40,10 +40,11 @@ UserSchema.methods.jwtSign = function () {
     {
       id: this._id,
     },
-    process.env.JWT_SECRET,
+    "AUTHENTICATIONUSINGJWT",
     {
-      expiresIn: "30s",
-    }
+      expiresIn: "5s",
+    },
+    
   );
 };
 

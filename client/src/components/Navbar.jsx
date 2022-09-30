@@ -4,42 +4,30 @@ import {
   Box,
   Toolbar,
   Typography,
-  Button,
   IconButton,
   MenuItem,
   Menu,
 } from "@mui/material";
-import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../actions/index";
+import { logout, logoutUser } from "../actions/index";
 import FeedIcon from "@mui/icons-material/Feed";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
-export default function Navbar({ users }) {
+export default function Navbar() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const userInfo = useSelector((info) => info.loginReducer);
   const dispatch = useDispatch();
   const Navigate = useNavigate();
 
-  const logoutRequest = async () => {
-    try {
-      await axios
-        .post("http://127.0.0.1:4000/logout", {
-          withCredentials: true,
-          credentials: "include",
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            dispatch(logout());
-          }
-        })
-        .then(() => {
-          Navigate("/");
-        });
-    } catch (error) {
-      console.log(error);
+  const logoutRequest = () => {
+    dispatch(logoutUser());
+    if (dispatch({ type: "LOGOUT_SUCCESS" })) {
+      userInfo.userInfo = null;
+      dispatch(logout());
+      Navigate("/");
     }
   };
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClose = () => {
     setAnchorEl(null);

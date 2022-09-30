@@ -1,2 +1,11 @@
 /node_modules
 .env
+server/.git
+server/node_modules
+server/.env
+client/.git
+client/node_modules
+client/.env
+
+
+I'm not sure if this is the best way to do it, but it works for me.
