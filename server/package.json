@@ -46,7 +46,9 @@
 
     "nodemailer": "^6.7.8",
 
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+
+    "express-api-cache":"^1.0.4"
 
   }
 
