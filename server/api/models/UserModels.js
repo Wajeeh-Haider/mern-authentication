@@ -42,7 +42,7 @@ UserSchema.methods.jwtSign = function () {
     },
     "AUTHENTICATIONUSINGJWT",
     {
-      expiresIn: "5s",
+      expiresIn: "15m",
     },
     
   );

@@ -7,6 +7,7 @@ import {
   IconButton,
   MenuItem,
   Menu,
+  CssBaseline,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -35,6 +36,7 @@ export default function Navbar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <CssBaseline/>
       <AppBar
         position="relative"
         style={{ position: "relative", top: 0, left: 0, margin: 0, zIndex: 1 }}

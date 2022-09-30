@@ -1,16 +1,44 @@
 import React from "react";
-import { Avatar, Button, Container, Grid, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Container,
+  Grid,
+  Typography,
+  Modal,
+  Fade,
+} from "@mui/material";
 import ReactLoading from "react-loading";
 import { useDispatch, useSelector } from "react-redux";
 import { accessToken, getDataAndRefreshToken, logout } from "../actions";
+import ChangePassword from "../components/ChangePassword";
+import Backdrop from "@mui/material/Backdrop";
+import { Box } from "@mui/system";
 
 const MyProfile = () => {
+  const [open, setOpen] = React.useState(false);
   const [users, setUser] = React.useState();
   const myInfo = useSelector((state) => state.myInfoReducer);
   const myInfoRefresh = useSelector((state) => state.refreshTokenReducer);
   const dispatch = useDispatch();
   let firstRenders = true;
 
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "white",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+  const handleOpen = () => {
+    return setOpen(true);
+  };
+  const handleClose = () => {
+    return setOpen(false);
+  };
   const sendRequests = () => {
     dispatch(accessToken());
     setUser(myInfo?.myData?.user);
@@ -31,7 +59,7 @@ const MyProfile = () => {
   React.useEffect(() => {
     let interval = setInterval(() => {
       refreshToken();
-    }, 4 * 1000);
+    }, 14 * 60 * 1000); // 14 minutes
     return () => clearInterval(interval);
   }, []);
 
@@ -55,9 +83,19 @@ const MyProfile = () => {
             spacing={4}
             justifyContent="center"
             alignItems={"center"}
-            sx={{ margin: "auto", height: "70vh" }}
+            sx={{ height: "70vh" }}
           >
-            <Grid item xs={12} sm={12} md={3}>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={3}
+              sx={{
+                marginTop: "30px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
               <Avatar
                 style={{
                   width: "150px",
@@ -101,13 +139,32 @@ const MyProfile = () => {
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button variant={"contained"} sx={{ marginTop: "10px" }}>
+                  <Button
+                    onClick={handleOpen}
+                    variant={"contained"}
+                    sx={{ marginTop: "10px" }}
+                  >
                     Change Password
                   </Button>
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
+          <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={open}>
+              <Box sx={style}>
+                <ChangePassword setOpen={setOpen} />
+              </Box>
+            </Fade>
+          </Modal>
         </Container>
       </main>
     </>

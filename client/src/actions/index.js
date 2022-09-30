@@ -122,3 +122,21 @@ export const getDataAndRefreshToken = () => async (dispatch) => {
     dispatch({ type: "REFRESH_TOKEN_REQUEST_FAILED", payload: error.response });
   }
 };
+
+export const ChangePassword =
+  (oldPassword, newPassword) => async (dispatch) => {
+    try {
+      dispatch({ type: "CHANGE_PASSWORD_REQUEST" });
+      await instance.post("/api/changepassword", {
+        oldPassword,
+        newPassword,
+      });
+      dispatch({ type: "CHANGE_PASSWORD_SUCCESS" });
+      toast.success("Password Changed Successfully");
+    } catch (error) {
+      dispatch({
+        type: "CHANGE_PASSWORD_FAILURE",
+        payload: error.response && error?.response?.message,
+      });
+    }
+  };

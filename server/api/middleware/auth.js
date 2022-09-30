@@ -6,15 +6,13 @@ const isAuthenticated = async (req, res, next) => {
   const { token } = req.cookies;
   const cookie = req.cookies.name;
   if (!cookie === "token" || !token) {
-    return res.status(400).json({ message: "Un-authasasasasorized access" });
+    return res.status(400).json({ message: "Un-authorized access" });
   }
-  const decodeToken = jwt.verify(token, "AUTHENTICATIONUSINGJWT", {
-    ignoreExpiration: true,
-  });
+  const decodeToken = jwt.verify(token, "AUTHENTICATIONUSINGJWT");
   const loggedInUser = await User.findById(decodeToken.id);
   req.user = loggedInUser;
   next();
-};
+};  
 
 // In refresh token we verify our token first and then clear it is valid then we create a new token and send it to the user .
 const refreshToken = async (req, res, next) => {
@@ -35,7 +33,7 @@ const refreshToken = async (req, res, next) => {
     },
     "AUTHENTICATIONUSINGJWT",
     {
-      expiresIn: "10s", // 10 seconds
+      expiresIn: "30m", // 30 minutes
     }
   );
   if (newToken) {

@@ -51,7 +51,25 @@ const getMyInfo = async (req, res) => {
   }
   return res.status(404).json({ message: "User not found" });
 };
+const changePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const id = req.user._id;
+  const findUser = await User.findById(id);
+  const isMatch = await bcrypt.compare(oldPassword, findUser.password);
+  if (!isMatch) {
+    return res.status(400).json({ message: "Old Password is not correct" });
+  }
+  findUser.password = newPassword;
+  if (findUser.password === oldPassword)
+    return res
+      .status(400)
+      .json({ message: "Old password and new password cannot be same" });
 
+  if ((findUser.password = newPassword)) {
+    res.status(200).json({ message: "Password Changed Successfully" });
+    await findUser.save();
+  }
+};
 const deleteUser = async (req, res) => {
   const id = req.params.id;
   const del = await User.deleteOne({ _id: id });
@@ -77,4 +95,12 @@ const Logout = (req, res) => {
   });
 };
 
-export { createUser, deleteUser, Login, Logout, getMyInfo, allData };
+export {
+  createUser,
+  deleteUser,
+  Login,
+  Logout,
+  getMyInfo,
+  allData,
+  changePassword,
+};

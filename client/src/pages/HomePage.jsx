@@ -2,7 +2,7 @@ import React from "react";
 import Cards from "../components/Cards";
 import MainHero from "../components/MainHero";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { accessToken, getDataAndRefreshToken, logout } from "../actions";
 import ReactLoading from "react-loading";
@@ -13,16 +13,22 @@ const HomePage = () => {
   const myInfo = useSelector((state) => state.myInfoReducer);
   const myInfoRefresh = useSelector((state) => state.refreshTokenReducer);
   const dispatch = useDispatch();
+  const Navigate = useNavigate();
+
   let firstRenders = true;
 
   const sendRequests = () => {
     dispatch(accessToken());
-    setUser(myInfo?.myData?.user);
+    setUser(myInfo.myData?.user);
+    if (dispatch.type === "CHANGE_PASSWORD_FAILURE") {
+      dispatch(logout());
+      Navigate("/");
+    }
   };
 
   const refreshToken = () => {
     dispatch(getDataAndRefreshToken());
-    setUser(myInfoRefresh.myData.user);
+    setUser(myRefreshData?.myData?.user);
   };
 
   React.useEffect(() => {
@@ -35,20 +41,10 @@ const HomePage = () => {
   React.useEffect(() => {
     let interval = setInterval(() => {
       refreshToken();
-    }, 4 * 1000);
+    }, 14 * 60 * 1000); // 14 minutes
     return () => clearInterval(interval);
   }, []);
 
-  if (!users)
-    return (
-      <ReactLoading
-        type="bubbles"
-        color="#1976D2"
-        height="5%"
-        width="5%"
-        className="loader"
-      />
-    );
   return (
     <>
       <MainHero users={users} />

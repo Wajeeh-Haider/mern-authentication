@@ -1,28 +1,26 @@
 const initialState = {
   loading: false,
-  myData: null,
   error: null,
+  data: null,
 };
-const refreshTokenReducer = (state = initialState, action) => {
+
+const ChangePasswordReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "GET_INFO_REQUEST_REFRESH":
+    case "CHANGE_PASSWORD_REQUEST":
       return {
         loading: true,
       };
-    case "GET_INFO_REFRESH_TOKEN":
+    case "CHANGE_PASSWORD_SUCCESS":
       return {
         loading: false,
-        myData: action.payload,
+        data: action.payload,
       };
-    case "REFRESH_TOKEN_REQUEST_FAILED":
+    case "CHANGE_PASSWORD_FAILURE":
       return {
         loading: false,
         error: action.payload,
       };
-
     default:
       return state;
   }
 };
-
-export default refreshTokenReducer;

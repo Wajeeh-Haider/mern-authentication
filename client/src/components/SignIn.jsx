@@ -1,7 +1,6 @@
 import React from "react";
 import { Container, Button, Grid, Typography, TextField } from "@mui/material";
 import validator from "validator";
-import ReactLoading from "react-loading";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +16,6 @@ const SignIn = () => {
   const Navigate = useNavigate();
   const isLogged = useSelector((state) => state.authReducer);
   const userLogin = useSelector((state) => state.loginReducer);
-  const { loading } = userLogin;
 
   const matches = useMediaQuery("(min-width:1200px)");
   const query = useMediaQuery("(min-width:346px)");
@@ -63,7 +61,6 @@ const SignIn = () => {
           justifyContent="center"
           alignItems="center"
           sx={{ height: "60vh" }}
-          xs={{ direction: "row-reverse" }}
         >
           <Grid item sm={12} xs={12} md={6}>
             <img
