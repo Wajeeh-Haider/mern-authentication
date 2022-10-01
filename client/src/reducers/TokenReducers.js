@@ -18,6 +18,7 @@ const refreshTokenReducer = (state = initialState, action) => {
       return {
         loading: false,
         error: action.payload,
+        myData: null,
       };
 
     default:

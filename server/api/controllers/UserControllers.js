@@ -45,7 +45,7 @@ const Login = async (req, res) => {
 
 const getMyInfo = async (req, res) => {
   const id = req.user._id;
-  const user = await User.findById(id);
+  const user = await User.findById(id, "-password");
   if (user) {
     return res.status(200).json({ user });
   }
@@ -70,6 +70,23 @@ const changePassword = async (req, res) => {
     await findUser.save();
   }
 };
+
+export const updateProfile = async (req, res) => {
+  try {
+    const id = req.user.id;
+    const { fullName, address } = req.body;
+    const user = await User.findByIdAndUpdate(id, {
+      fullName,
+      address,
+    });
+    if (user) {
+      res.status(200).json({ message: "Profile Updated Successfully" });
+    }
+  } catch (err) {
+    return res.status(400).json({ message: "Cannot Update Profile", err });
+  }
+};
+
 const deleteUser = async (req, res) => {
   const id = req.params.id;
   const del = await User.deleteOne({ _id: id });

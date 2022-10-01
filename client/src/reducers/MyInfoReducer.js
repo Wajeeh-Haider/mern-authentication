@@ -5,6 +5,7 @@ const initialState = {
 };
 
 const myInfoReducer = (state = initialState, action) => {
+  console.log("action", action);
   switch (action.type) {
     case "GET_INFO_REQUEST":
       return {
@@ -19,6 +20,7 @@ const myInfoReducer = (state = initialState, action) => {
       return {
         loading: false,
         error: action.payload,
+        myData: null,
       };
 
     default:

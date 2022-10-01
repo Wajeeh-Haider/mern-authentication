@@ -105,7 +105,7 @@ export const accessToken = () => async (dispatch) => {
     dispatch({ type: "GET_INFO_SUCCESSFULL", payload: data });
   } catch (error) {
     dispatch({
-      type: "GET_INFO_FAIL",
+      type: "GET_INFO_REQUEST_FAILED",
       payload: error.response && error?.response?.status,
     });
     console.log(error);
@@ -140,3 +140,19 @@ export const ChangePassword =
       });
     }
   };
+
+export const updateProfile = (fullName, address) => async (dispatch) => {
+  try {
+    dispatch({ type: "UPDATE_PROFILE_REQUEST" });
+    await instance.post("/api/updateprofile", {
+      fullName,
+      address,
+    });
+    dispatch({ type: "UPDATE_PROFILE_SUCCESS" });
+  } catch (error) {
+    dispatch({
+      type: "UPDATE_PROFILE_FAILURE",
+      payload: error.response && error?.response?.message,
+    });
+  }
+};

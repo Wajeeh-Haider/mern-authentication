@@ -12,7 +12,7 @@ const isAuthenticated = async (req, res, next) => {
   const loggedInUser = await User.findById(decodeToken.id);
   req.user = loggedInUser;
   next();
-};  
+};
 
 // In refresh token we verify our token first and then clear it is valid then we create a new token and send it to the user .
 const refreshToken = async (req, res, next) => {
@@ -26,6 +26,7 @@ const refreshToken = async (req, res, next) => {
   });
   const loggedInUser = await User.findById(decodeToken.id);
   res.clearCookie("token");
+  req.cookies.token = null;
 
   const newToken = jwt.sign(
     {

@@ -1,5 +1,11 @@
 import React from "react";
-import { Typography, Grid, TextField, Button } from "@mui/material";
+import {
+  Typography,
+  Grid,
+  TextField,
+  Button,
+  useMediaQuery,
+} from "@mui/material";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { ChangePassword as PasswordChange } from "../actions";
@@ -10,6 +16,8 @@ const ChangePassword = ({ setOpen }) => {
     newPassword: "",
     confirmPassword: "",
   });
+  const query = useMediaQuery("(min-width:346px)");
+
   const dispatch = useDispatch();
   const handleChange = (e) => {
     setInput({ ...Input, [e.target.name]: e.target.value });
@@ -34,9 +42,16 @@ const ChangePassword = ({ setOpen }) => {
 
   return (
     <>
-      <Grid container spacing={3} display="flex" justifyContent="center">
+      <Button variant="standard" onClick={() => setOpen(false)}>
+        x
+      </Button>
+      <Grid
+        container
+        spacing={3}
+        sx={{ display: "flex", justifyContent: "center" }}
+      >
         <Grid item component="form" xs={12} sm={6}>
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h5" gutterBottom>
             Change Password
           </Typography>
           <TextField
