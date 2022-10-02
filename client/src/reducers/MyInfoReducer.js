@@ -1,7 +1,7 @@
 const initialState = {
   loading: false,
   myData: null,
-  error: false,
+  error: null,
 };
 
 const myInfoReducer = (state = initialState, action) => {
@@ -10,6 +10,7 @@ const myInfoReducer = (state = initialState, action) => {
     case "GET_INFO_REQUEST":
       return {
         loading: true,
+        error: null,
       };
     case "GET_INFO_SUCCESSFULL":
       return {

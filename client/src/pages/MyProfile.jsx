@@ -26,24 +26,24 @@ const MyProfile = () => {
   const myInfoRefresh = useSelector((state) => state.refreshTokenReducer);
   const dispatch = useDispatch();
   const Navigate = useNavigate();
-  const query = useMediaQuery("(min-width:700px)");
   let firstRenders = true;
+  const query = useMediaQuery("(min-width:700px)");
 
   const sendRequests = () => {
     dispatch(accessToken());
     setUser(myInfo?.myData?.user);
-    if (myInfo.error) {
-      Navigate("/timeout");
+    if (myInfo.error === 400 || myInfo.error === 404) {
       dispatch(logout());
+      Navigate("/timeout");
     }
   };
 
   const refreshToken = () => {
     dispatch(getDataAndRefreshToken());
     setUser(myInfoRefresh?.myData.user);
-    if (myInfoRefresh.error) {
-      Navigate("/timeout");
+    if (myInfoRefresh.error === 400 || myInfoRefresh.error === 404) {
       dispatch(logout());
+      Navigate("/timeout");
     }
   };
 
@@ -52,14 +52,14 @@ const MyProfile = () => {
       firstRenders = false;
       sendRequests();
     }
-  }, []);
+  }, [dispatch]);
 
   React.useEffect(() => {
     let interval = setInterval(() => {
       refreshToken();
     }, 14 * 60 * 1000); // 14 minutes
     return () => clearInterval(interval);
-  }, []);
+  }, [dispatch]);
 
   if (myInfo?.loading)
     return (
