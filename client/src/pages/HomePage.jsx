@@ -39,14 +39,14 @@ const HomePage = () => {
       firstRenders = false;
       sendRequests();
     }
-  }, [dispatch]);
+  }, [firstRenders, dispatch, Navigate]);
 
   React.useEffect(() => {
     let interval = setInterval(() => {
       refreshToken();
     }, 14 * 60 * 1000); // 14 minutes
     return () => clearInterval(interval);
-  }, [dispatch]);
+  }, [firstRenders, dispatch, Navigate]);
 
   if (myInfo?.loading) {
     return (

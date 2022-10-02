@@ -5,7 +5,6 @@ const initialState = {
 };
 
 const myInfoReducer = (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
     case "GET_INFO_REQUEST":
       return {

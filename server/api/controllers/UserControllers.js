@@ -28,7 +28,7 @@ const createUser = async (req, res) => {
 
 const Login = async (req, res) => {
   const { email, password } = req.body;
-  const loginUser = await User.findOne({ email });
+  const loginUser = await User.findOne({ email }).select("+password");
   if (!loginUser) {
     return res.status(404).json({ message: "Invalid Credentials" });
   } else {
@@ -51,6 +51,7 @@ const getMyInfo = async (req, res) => {
   }
   return res.status(404).json({ message: "User not found" });
 };
+
 const changePassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const id = req.user._id;
