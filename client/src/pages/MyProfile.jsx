@@ -32,7 +32,7 @@ const MyProfile = () => {
   const sendRequests = () => {
     dispatch(accessToken());
     setUser(myInfo?.myData?.user);
-    if (myInfo.error || myInfo?.myData?.user === null) {
+    if (myInfo.error) {
       Navigate("/timeout");
       dispatch(logout());
     }
@@ -41,7 +41,7 @@ const MyProfile = () => {
   const refreshToken = () => {
     dispatch(getDataAndRefreshToken());
     setUser(myInfoRefresh?.myData.user);
-    if (myInfoRefresh.error || myInfoRefresh?.myData?.user === null) {
+    if (myInfoRefresh.error) {
       Navigate("/timeout");
       dispatch(logout());
     }
@@ -57,7 +57,7 @@ const MyProfile = () => {
   React.useEffect(() => {
     let interval = setInterval(() => {
       refreshToken();
-    }, 5 * 1000); // 14 minutes
+    }, 14 * 60 * 1000); // 14 minutes
     return () => clearInterval(interval);
   }, []);
 

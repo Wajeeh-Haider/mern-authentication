@@ -108,7 +108,6 @@ export const accessToken = () => async (dispatch) => {
       type: "GET_INFO_REQUEST_FAILED",
       payload: error.response && error?.response?.status,
     });
-    console.log(error);
   }
 };
 

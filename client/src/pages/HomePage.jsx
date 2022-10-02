@@ -12,6 +12,7 @@ const HomePage = () => {
   const [users, setUser] = React.useState([]);
   const myInfo = useSelector((state) => state.myInfoReducer);
   const myInfoRefresh = useSelector((state) => state.refreshTokenReducer);
+  console.log(myInfo);
   const dispatch = useDispatch();
   const Navigate = useNavigate();
   let firstRenders = true;
@@ -19,18 +20,14 @@ const HomePage = () => {
   const sendRequests = () => {
     dispatch(accessToken());
     setUser(myInfo?.myData?.user);
-    if (myInfo.error || myInfo?.myData?.user === null) {
-      Navigate("/timeout");
-      dispatch(logout());
-    }
   };
 
   const refreshToken = () => {
     dispatch(getDataAndRefreshToken());
     setUser(myInfoRefresh?.myData.user);
-    if (myInfoRefresh.error || myInfoRefresh?.myData?.user === null) {
-      Navigate("/timeout");
+    if (myInfoRefresh.error) {
       dispatch(logout());
+      Navigate("/timeout");
     }
   };
 
@@ -39,7 +36,7 @@ const HomePage = () => {
       firstRenders = false;
       sendRequests();
     }
-  }, []);
+  }, [firstRenders]);
 
   React.useEffect(() => {
     let interval = setInterval(() => {

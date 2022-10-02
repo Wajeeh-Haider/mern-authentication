@@ -19,7 +19,7 @@ UserRoute.post("/create/user", createUser);
 UserRoute.post("/login", Login);
 UserRoute.delete("/delete/:id", deleteUser);
 UserRoute.get("/allData", cache("10 minutes"), isAuthenticated, allData);
-UserRoute.post("/logout", isAuthenticated, Logout);
+UserRoute.post("/logout", Logout);
 UserRoute.get(
   "/api/getmyinfo",
   cache("10 minutes"),
