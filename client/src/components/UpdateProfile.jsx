@@ -1,9 +1,9 @@
 import React from "react";
 import { Typography, Grid, TextField, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { updateProfile } from "../actions";
+import { accessToken, updateProfile } from "../actions";
 
-const UpdateProfile = ({ setOpenUpdateModal }) => {
+const UpdateProfile = ({ setOpenUpdateModal, myInfo }) => {
   const [Input, setInput] = React.useState({
     fullName: "",
     address: "",
@@ -24,6 +24,7 @@ const UpdateProfile = ({ setOpenUpdateModal }) => {
       dispatch(updateProfile(fullName, address));
       if (dispatch({ type: "CHANGE_PASSWORD_SUCCESS" })) {
         setOpenUpdateModal(false);
+        dispatch(accessToken());
       }
     }
   };

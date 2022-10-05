@@ -20,6 +20,10 @@ const refreshTokenReducer = (state = initialState, action) => {
         error: action.payload,
         myData: null,
       };
+    case "RESET_REFRESH_TOKEN_INFO":
+       return {
+         ...initialState,
+       };
 
     default:
       return state;

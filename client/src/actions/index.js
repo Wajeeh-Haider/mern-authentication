@@ -1,6 +1,5 @@
 import axios from "axios";
 import { toast } from "react-hot-toast";
-
 const instance = axios.create({
   baseURL: "http://127.0.0.1:4000",
   withCredentials: true,
@@ -83,9 +82,11 @@ export const SignUpUser =
 export const logoutUser = () => async (dispatch) => {
   try {
     dispatch({ type: "LOGOUT_REQUEST" });
+
     await instance.post("/logout").then((response) => {
       if (response.status === 200) {
         dispatch({ type: "LOGOUT_SUCCESS" });
+        
         toast.success("Logged out successfully");
       }
     });
@@ -102,11 +103,11 @@ export const accessToken = () => async (dispatch) => {
     dispatch({ type: "GET_INFO_REQUEST" });
     const request = await instance.get("/api/getmyinfo");
     const data = await request.data;
-    dispatch({ type: "GET_INFO_SUCCESSFULL", payload: data });
+    dispatch({ type: "GET_INFO_SUCCESSFULL", payload: data.user });
   } catch (error) {
     dispatch({
       type: "GET_INFO_REQUEST_FAILED",
-      payload: error.response && error?.response?.status,
+      payload: error?.response?.status,
     });
   }
 };
@@ -123,7 +124,7 @@ export const getDataAndRefreshToken = () => async (dispatch) => {
 };
 
 export const ChangePassword =
-  (oldPassword, newPassword) => async (dispatch) => {
+  (oldPassword, newPassword, setOpen) => async (dispatch) => {
     try {
       dispatch({ type: "CHANGE_PASSWORD_REQUEST" });
       await instance.post("/api/changepassword", {
@@ -131,12 +132,15 @@ export const ChangePassword =
         newPassword,
       });
       dispatch({ type: "CHANGE_PASSWORD_SUCCESS" });
-      toast.success("Password Changed Successfully");
+      setOpen(false);
     } catch (error) {
       dispatch({
         type: "CHANGE_PASSWORD_FAILURE",
-        payload: error.response && error?.response?.message,
+        payload: error.response && error?.response?.status,
       });
+      if (error?.response?.status === 400) {
+        alert("Please Enter Correct Password");
+      }
     }
   };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Avatar,
   Button,
@@ -17,60 +17,72 @@ import ChangePassword from "../components/ChangePassword";
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import UpdateProfile from "../components/UpdateProfile";
+import Pusher from "pusher-js";
+import { toast } from "react-hot-toast";
 
 const MyProfile = () => {
   const [open, setOpen] = React.useState(false);
-  const [openUpdateModal, setOpenUpdateModal] = React.useState(false);
   const [users, setUser] = React.useState([]);
-  const myInfo = useSelector((state) => state.myInfoReducer);
+  const [PusherUser, setPusherUser] = React.useState([]);
+  const [openUpdateModal, setOpenUpdateModal] = React.useState(false);
+  const myInfo = useSelector((state) => state.getMyInfoReducer);
   const myInfoRefresh = useSelector((state) => state.refreshTokenReducer);
   const dispatch = useDispatch();
   const Navigate = useNavigate();
-  let firstRenders = true;
   const query = useMediaQuery("(min-width:700px)");
+  let firstRender = true;
 
-  const sendRequests = () => {
-    dispatch(accessToken());
-    setUser(myInfo?.myData?.user);
-    if (myInfo.error === 400) {
+  const getData = () => {
+    dispatch(accessToken()).then(() => {
+      const get = JSON.parse(localStorage.getItem("persist:Auth"));
+      const data = JSON.parse(get.getMyInfoReducer);
+      myInfo.myData == null ? setUser(data?.myData) : setUser(myInfo?.myData);
+    });
+
+    if (myInfo.error === 400 || myInfo.error === 404) {
       dispatch(logout());
+      dispatch(logoutUser());
       Navigate("/timeout");
     }
   };
 
-  const refreshToken = () => {
-    dispatch(getDataAndRefreshToken());
-    setUser(myInfoRefresh?.myData.user);
-    if (myInfoRefresh.error === 400) {
-      dispatch(logout());
-      Navigate("/timeout");
-    }
+  const getInfoAndRefreshToken = () => {
+    dispatch(getDataAndRefreshToken()).then(() => {
+      if (myInfoRefresh.error === 400 || myInfoRefresh.error === 404) {
+        dispatch(logout());
+        Navigate("/timeout");
+      } else {
+        setUser(myInfoRefresh.myData.user);
+      }
+    });
   };
-
-  React.useEffect(() => {
-    if (firstRenders) {
-      firstRenders = false;
-      sendRequests();
+  useEffect(() => {
+    if (firstRender) {
+      getData();
+      firstRender = false;
     }
-  }, [firstRenders, dispatch, Navigate]);
+  }, [dispatch, firstRender]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let interval = setInterval(() => {
-      refreshToken();
-    }, 14 * 60 * 1000); // 14 minutes
+      getInfoAndRefreshToken();
+    }, 1000 * 60 * 5); // 5 minutes
     return () => clearInterval(interval);
-  }, [firstRenders, dispatch, Navigate]);
+  }, []);
 
-  if (myInfo?.loading)
-    return (
-      <ReactLoading
-        type="bubbles"
-        color="#1976D2"
-        height="5%"
-        width="5%"
-        className="loader"
-      />
-    );
+  useEffect(() => {
+    const pusher = new Pusher("dc54355a02fdd703dc39", {
+      cluster: "mt1",
+    });
+    const channel = pusher.subscribe("updateUser");
+    channel.bind("updated", (data) => {
+      setPusherUser(data);
+    });
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+    };
+  }, [PusherUser]);
 
   const style = {
     position: "absolute",
@@ -114,16 +126,22 @@ const MyProfile = () => {
           </Grid>
           <Grid item xs={12} sm={12} md={3}>
             <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
-              Name: {users.fullName}
+              Name:
+              {PusherUser == [] || PusherUser == {} || PusherUser.length == 0
+                ? users && users.fullName
+                : PusherUser.fullName}
             </Typography>
             <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
-              Address : {users.address}
+              Address :
+              {PusherUser == [] || PusherUser == {} || PusherUser.length == 0
+                ? users && users.address
+                : PusherUser.address}
             </Typography>
             <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
-              Email : {users.email}
+              Email : {users && users.email}
             </Typography>
             <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
-              Status : {users.status}
+              Status : {users && users.status}
             </Typography>
             <Grid container justifyContent={"space-between"}>
               <Grid item>
@@ -174,7 +192,10 @@ const MyProfile = () => {
         >
           <Fade in={openUpdateModal}>
             <Box sx={style}>
-              <UpdateProfile setOpenUpdateModal={setOpenUpdateModal} />
+              <UpdateProfile
+                setOpenUpdateModal={setOpenUpdateModal}
+                myInfo={myInfo}
+              />
             </Box>
           </Fade>
         </Modal>

@@ -17,17 +17,15 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const userInfo = useSelector((info) => info.loginReducer);
+
   const dispatch = useDispatch();
   const Navigate = useNavigate();
 
   const logoutRequest = () => {
+    dispatch(logout());
     dispatch(logoutUser());
-    if (dispatch({ type: "LOGOUT_SUCCESS" })) {
-      userInfo.userInfo = null;
-      dispatch(logout());
-      Navigate("/");
-    }
+    Navigate("/");
+    localStorage.clear();
   };
 
   const handleClose = () => {
@@ -36,7 +34,7 @@ export default function Navbar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <CssBaseline/>
+      <CssBaseline />
       <AppBar
         position="relative"
         style={{ position: "relative", top: 0, left: 0, margin: 0, zIndex: 1 }}

@@ -1,17 +1,19 @@
 import React from "react";
 import { Container, Typography, Grid, Button } from "@mui/material";
 
-const MainHero = ({ users }) => {
+const MainHero = ({ users, PusherUser }) => {
   return (
     <>
       <main>
-        <div> 
+        <div>
           <Container
             maxWidth="xs"
             style={{ marginTop: "100px", marginBottom: "50px" }}
           >
             <Typography variant="h4" align="center" gutterBottom>
-              Hello {users && users.fullName}
+              {PusherUser == [] || PusherUser == {} || PusherUser.length == 0
+                ? users && users.fullName
+                : PusherUser.fullName}
             </Typography>
             <Typography
               variant="h5"
@@ -19,8 +21,7 @@ const MainHero = ({ users }) => {
               color="textSecondary"
               paragraph
             >
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit
-              quos repellendus dolorum earum optio.
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             </Typography>
             <Grid container spacing={4} justifyContent="center">
               <Grid item>
