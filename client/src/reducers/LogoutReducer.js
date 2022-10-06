@@ -1,6 +1,6 @@
-
 const initialState = {
   loading: false,
+  error: null,
 };
 
 const logoutReducer = (state = initialState, action) => {
@@ -11,6 +11,7 @@ const logoutReducer = (state = initialState, action) => {
       };
     }
     case "LOGOUT_SUCCESS": {
+ 
       return {
         loading: false,
       };

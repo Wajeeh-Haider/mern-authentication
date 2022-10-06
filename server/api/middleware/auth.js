@@ -19,7 +19,7 @@ const refreshToken = async (req, res, next) => {
   const { token } = req.cookies;
   const cookie = req.cookies.name;
   if (!cookie === "token" || !token) {
-    return res.status(400).json({ message: "Un-authorized access W" });
+    return res.status(400).json({ message: "Un-authorized access" });
   }
   const decodeToken = jwt.verify(token, "AUTHENTICATIONUSINGJWT", {
     ignoreExpiration: true,

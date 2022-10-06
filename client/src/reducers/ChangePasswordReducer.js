@@ -4,7 +4,7 @@ const initialState = {
   data: null,
 };
 
-const ChangePasswordReducer = (state = initialState, action) => {
+const changePasswordRed = (state = initialState, action) => {
   switch (action.type) {
     case "CHANGE_PASSWORD_REQUEST":
       return {
@@ -19,8 +19,11 @@ const ChangePasswordReducer = (state = initialState, action) => {
       return {
         loading: false,
         error: action.payload,
+        data: null,
       };
     default:
       return state;
   }
 };
+
+export default changePasswordRed;

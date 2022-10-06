@@ -1,6 +1,7 @@
 const initialState = {
   loading: false,
   userInfo: null,
+  error: null,
 };
 
 const loginReducer = (state = initialState, action) => {
@@ -20,6 +21,11 @@ const loginReducer = (state = initialState, action) => {
       return {
         loading: false,
         error: action.payload,
+      };
+    }
+    case "RESET_LOGIN": {
+      return {
+        ...initialState,
       };
     }
 

@@ -6,9 +6,9 @@ import {
   Button,
   useMediaQuery,
 } from "@mui/material";
-import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { ChangePassword as PasswordChange } from "../actions";
+import { useSelector } from "react-redux";
 
 const ChangePassword = ({ setOpen }) => {
   const [Input, setInput] = React.useState({
@@ -16,8 +16,6 @@ const ChangePassword = ({ setOpen }) => {
     newPassword: "",
     confirmPassword: "",
   });
-  const query = useMediaQuery("(min-width:346px)");
-
   const dispatch = useDispatch();
   const handleChange = (e) => {
     setInput({ ...Input, [e.target.name]: e.target.value });
@@ -27,16 +25,14 @@ const ChangePassword = ({ setOpen }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (oldPassword === newPassword) {
-      alert("Old password and new password cannot be same");
+    if ((oldPassword, newPassword, confirmPassword === "")) {
+      alert("Please fill all the fields");
+    } else if (oldPassword === newPassword || oldPassword === confirmPassword) {
+      alert("Old Password and New Password cannot be same");
     } else if (newPassword !== confirmPassword) {
       alert("New password and confirm password must be same");
     } else {
-      dispatch(PasswordChange(oldPassword, newPassword));
-      if (dispatch({ type: "CHANGE_PASSWORD_SUCCESS" })) {
-        toast.success("Password Changed Successfully");
-        setOpen(false);
-      }
+      dispatch(PasswordChange(oldPassword, newPassword , setOpen));
     }
   };
 

@@ -4,9 +4,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import UserRoute from "./api/routes/UserRoutes.js";
-import "./api/db/db.js";
+import mydb from "./api/db/db.js";
 dotenv.config();
-
+mydb();
 const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());

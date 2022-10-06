@@ -2,8 +2,21 @@ import { Button, Container, Grid, Typography } from "@mui/material";
 import React from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const SessionTimeout = () => {
+  const dispatch = useDispatch();
+  dispatch({ type: "LOGOUT" });
+  dispatch({ type: "LOGOUT_SUCCESS" });
+  const myInfo = useSelector((state) => state.getMyInfoReducer);
+  const myInfoRefresh = useSelector((state) => state.refreshTokenReducer);
+  const { error } = myInfo;
+  const { error: refreshError } = myInfoRefresh;
+  error === null;
+  refreshError === null;
+  localStorage.clear();
+
   return (
     <>
       <div>

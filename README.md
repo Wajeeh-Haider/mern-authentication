@@ -3,7 +3,7 @@
 In this project you will 
 learn that how to make complete 
 authentication system with email 
-verification and JWT Auth Token. Add redux to make our site more secure and also persist our state on refresh.
+verification and JWT Access and Refresh Token. Add redux to make our site more secure and also persist our state on refresh. You will know how to integrate pusher in our app to make mongoDb realtime.
 
 
 
@@ -29,7 +29,7 @@ Setup Server's Directory
   cd server
   npm install
   nodemon app.js
-  Then create .env file into server's folder and add your secret keys into following env variables
+  Then create .env file into servers folder and add your secret keys into following env variables
 ```
 
 
@@ -38,27 +38,39 @@ Setup Server's Directory
 To run this project, you will need to add the following environment variables to your server's .env file.
 For gmail smtp server you can watch this video https://www.youtube.com/watch?v=1YXVdyVuFGA
 
-`PORT` 
-`DB_USER`
-`DB_PASSWORD`
-`DB_NAME`
-`JWT_SECRET`
-`SMTP_USER`
+`PORT` = Any
+`DB_USER` = "AnyUser"
+`DB_PASSWORD` = "Your DB Passowrd"
+`DB_NAME` = "Your MongoDb Name"
+`JWT_SECRET` = "Any Value"
+`SMTP_USER` 
 `SMTP_PASSWORD`
+`PUSHER_APP_ID`
+`PUSHER_KEY`
+`PUSHER_SECRET`
+`PUSHER_CLUSTER`
+
+You can add above DB ENV variables as "mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_NAME}?retryWrites=true&w=majority"
+
+Client Side ENV variables
+`PUSHER_SECRET`
 
 
 ## Features
 
+- Secure Information
 - Email Verification
 - JWT Access Token
-- Password Encrypition
 - JWT Refresh Token
-- State Persistence
+- Password Encryption
+- HTTP Only Cookie
+- Redux State Persistence
+- Realtime Profile Update With Pusher
 
 
 ## Demo
 
-https://mern-auth-wajeeh.netlify.app/
+https://mern-auth-wajeeh.netlify.app
 
 
 ## Deployment
@@ -81,7 +93,7 @@ Now push your react code on git and link with netlify
    git init
    git add .
    git commit -m "your awesome project"
-   git remote add origin <your repo url>
+   git remote add origin your-awesome-repo-url
    git push -u origin main/master 
 ```
 **Note:** After doing both steps you just have to copy the link that you had on heroku and paste in the front-end where you call the API

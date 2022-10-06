@@ -11,6 +11,7 @@ import MyProfile from "./pages/MyProfile";
 import "./App.css";
 import Navbar from "./components/Navbar";
 
+console.log(import.meta.env);
 const App = () => {
   const isLogged = useSelector((state) => state.authReducer);
   return (

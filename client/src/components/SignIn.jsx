@@ -5,7 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { SigninRequest } from "../actions";
+import { accessToken, SigninRequest } from "../actions";
 
 const SignIn = () => {
   const [Input, setInput] = React.useState({
@@ -15,8 +15,6 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const Navigate = useNavigate();
   const isLogged = useSelector((state) => state.authReducer);
-  const userLogin = useSelector((state) => state.loginReducer);
-
   const matches = useMediaQuery("(min-width:1200px)");
   const query = useMediaQuery("(min-width:346px)");
 

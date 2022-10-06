@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Avatar,
   Button,
@@ -10,67 +11,35 @@ import {
   Backdrop,
   useMediaQuery,
 } from "@mui/material";
-import ReactLoading from "react-loading";
-import { useDispatch, useSelector } from "react-redux";
-import { accessToken, getDataAndRefreshToken, logout } from "../actions";
 import ChangePassword from "../components/ChangePassword";
 import { Box } from "@mui/system";
-import { useNavigate } from "react-router-dom";
 import UpdateProfile from "../components/UpdateProfile";
+import RealTimeDataFromPusher from "../utils/RealTimeDataFromPusher";
+import getInfoAndRefreshToken from "../utils/getInfoAndRefreshToken";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, logoutUser } from "../actions";
 
 const MyProfile = () => {
   const [open, setOpen] = React.useState(false);
   const [openUpdateModal, setOpenUpdateModal] = React.useState(false);
-  const [users, setUser] = React.useState([]);
-  const myInfo = useSelector((state) => state.myInfoReducer);
-  const myInfoRefresh = useSelector((state) => state.refreshTokenReducer);
-  const dispatch = useDispatch();
   const Navigate = useNavigate();
-  let firstRenders = true;
+  const dispatch = useDispatch();
   const query = useMediaQuery("(min-width:700px)");
+  const PusherData = RealTimeDataFromPusher();
+  const refreshAndCurrentData = getInfoAndRefreshToken();
+  const myInfo = useSelector((state) => state?.getMyInfoReducer);
+  const refreshInfo = useSelector((state) => state?.refreshTokenReducer);
 
-  const sendRequests = () => {
-    dispatch(accessToken());
-    setUser(myInfo?.myData?.user);
-    if (myInfo.error === 400) {
-      dispatch(logout());
-      Navigate("/timeout");
-    }
-  };
-
-  const refreshToken = () => {
-    dispatch(getDataAndRefreshToken());
-    setUser(myInfoRefresh?.myData.user);
-    if (myInfoRefresh.error === 400) {
-      dispatch(logout());
-      Navigate("/timeout");
-    }
-  };
-
-  React.useEffect(() => {
-    if (firstRenders) {
-      firstRenders = false;
-      sendRequests();
-    }
-  }, [firstRenders, dispatch, Navigate]);
-
-  React.useEffect(() => {
-    let interval = setInterval(() => {
-      refreshToken();
-    }, 14 * 60 * 1000); // 14 minutes
-    return () => clearInterval(interval);
-  }, [firstRenders, dispatch, Navigate]);
-
-  if (myInfo?.loading)
-    return (
-      <ReactLoading
-        type="bubbles"
-        color="#1976D2"
-        height="5%"
-        width="5%"
-        className="loader"
-      />
-    );
+  if (
+    myInfo.error === 400 ||
+    myInfo.error === 404 ||
+    refreshInfo.error === 400 ||
+    refreshInfo.error === 404
+  ) {
+    dispatch(logout());
+    dispatch(logoutUser());
+    Navigate("/timeout");
+  }
 
   const style = {
     position: "absolute",
@@ -83,7 +52,10 @@ const MyProfile = () => {
     width: !query ? "90%" : "50%",
     padding: "30px",
   };
-
+  const myData =
+    PusherData == [] || PusherData == {} || PusherData.length == 0
+      ? refreshAndCurrentData
+      : PusherData;
   return (
     <>
       <Container>
@@ -114,16 +86,16 @@ const MyProfile = () => {
           </Grid>
           <Grid item xs={12} sm={12} md={3}>
             <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
-              Name: {users.fullName}
+              Name: {myData && myData.fullName}
             </Typography>
             <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
-              Address : {users.address}
+              Address :{myData && myData.address}
             </Typography>
             <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
-              Email : {users.email}
+              Email : {myData && refreshAndCurrentData.email}
             </Typography>
             <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
-              Status : {users.status}
+              Status : {myData && refreshAndCurrentData.status}
             </Typography>
             <Grid container justifyContent={"space-between"}>
               <Grid item>
@@ -174,7 +146,10 @@ const MyProfile = () => {
         >
           <Fade in={openUpdateModal}>
             <Box sx={style}>
-              <UpdateProfile setOpenUpdateModal={setOpenUpdateModal} />
+              <UpdateProfile
+                setOpenUpdateModal={setOpenUpdateModal}
+                myInfo={refreshAndCurrentData}
+              />
             </Box>
           </Fade>
         </Modal>

@@ -6,7 +6,7 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 const persistConfig = {
-  key: "root",
+  key: "Auth",
   storage,
   whiteList: ["rootReducer"],
   version: 1,

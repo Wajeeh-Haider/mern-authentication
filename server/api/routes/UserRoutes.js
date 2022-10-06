@@ -15,9 +15,9 @@ import { isAuthenticated, refreshToken } from "../middleware/auth.js";
 
 UserRoute.post("/create/user", createUser);
 UserRoute.post("/login", Login);
-UserRoute.delete("/delete/:id", deleteUser);
+UserRoute.delete("/delete/:id", isAuthenticated, deleteUser);
 UserRoute.get("/allData", isAuthenticated, allData);
-UserRoute.post("/logout", Logout);
+UserRoute.post("/logout", isAuthenticated, Logout);
 UserRoute.get("/api/getmyinfo", isAuthenticated, getMyInfo);
 UserRoute.post("/api/changePassword", isAuthenticated, changePassword);
 UserRoute.post("/api/updateprofile", isAuthenticated, updateProfile);
