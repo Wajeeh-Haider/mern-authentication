@@ -10,12 +10,12 @@ mydb();
 const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    credentials: true,
-    origin: "http://127.0.0.1:5173",
-  })
-);
+
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+};
+app.use(cors(...corsOptions));
 
 app.use(UserRoute);
 
