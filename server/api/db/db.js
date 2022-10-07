@@ -32,6 +32,7 @@ const myDb = () => {
           pusher.trigger("updateUser", "updated", {
             fullName: updatedFields.fullName,
             address: updatedFields.address,
+            password: updatedFields.password,
           });
         } else {
           console.log("Error triggering Pusher");

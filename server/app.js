@@ -4,18 +4,21 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import UserRoute from "./api/routes/UserRoutes.js";
-import mydb from "./api/db/db.js";
+import myDb from "./api/db/db.js";
+
 dotenv.config();
-mydb();
+
+myDb();
 const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-const corsOptions = {
-  origin: "http://localhost:3000",
-  credentials: true,
-};
-app.use(cors(...corsOptions));
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://127.0.0.1:5173",
+  })
+);
 
 app.use(UserRoute);
 

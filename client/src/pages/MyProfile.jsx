@@ -53,7 +53,7 @@ const MyProfile = () => {
     padding: "30px",
   };
   const myData =
-    PusherData == [] || PusherData == {} || PusherData.length == 0
+    PusherData.password || PusherData == [] || PusherData.length === 0
       ? refreshAndCurrentData
       : PusherData;
   return (
@@ -92,10 +92,10 @@ const MyProfile = () => {
               Address :{myData && myData.address}
             </Typography>
             <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
-              Email : {myData && refreshAndCurrentData.email}
+              Email : {refreshAndCurrentData && refreshAndCurrentData.email}
             </Typography>
             <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
-              Status : {myData && refreshAndCurrentData.status}
+              Status : {refreshAndCurrentData && refreshAndCurrentData.status}
             </Typography>
             <Grid container justifyContent={"space-between"}>
               <Grid item>
