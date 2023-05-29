@@ -13,18 +13,16 @@ const myDb = () => {
     useTLS: true,
   });
 
-  mongoose.connect(
-    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_NAME}?retryWrites=true&w=majority`,
-    {
-      useNewUrlParser: true,
-    }
-  );
+  mongoose.connect(`${process.env.MONGO_URI}`, {
+    useNewUrlParser: true,
+  });
 
   const db = mongoose.connection;
   db.once("open", () => {
     console.log("DB connected");
     const msgCollection = db.collection("users");
     const changeStream = msgCollection.watch();
+
     changeStream.on("change", (change) => {
       try {
         if (change.operationType === "update") {
@@ -40,6 +38,8 @@ const myDb = () => {
       } catch (error) {
         console.log("Error triggering Pusher", error);
       }
+
+      console.log(change);
     });
   });
 };

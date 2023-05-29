@@ -1,55 +1,22 @@
 import jwt from "jsonwebtoken";
 import User from "../models/UserModels.js";
-import refreshJwtToken from "../utils/RefreshJwtToken.js";
 
 const isAuthenticated = async (req, res, next) => {
-  const { token } = req.cookies;
-  const cookie = req.cookies.name;
-  if (!cookie === "token" || !token) {
-    return res.status(400).json({ message: "Un-authorized access" });
+  const token = req.headers.authorization;
+  console.log(token);
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized access" });
   }
-  const decodeToken = jwt.verify(token, "AUTHENTICATIONUSINGJWT");
-  const loggedInUser = await User.findById(decodeToken.id);
-  req.user = loggedInUser;
-  next();
+
+  try {
+    const decodedToken = jwt.verify(token, "AUTHENTICATIONUSINGJWT");
+    const loggedInUser = await User.findById(decodedToken.id);
+    req.user = loggedInUser;
+    next();
+  } catch (error) {
+    console.log(error);
+    return res.status(401).json({ message: "Invalid token" });
+  }
 };
 
-// In refresh token we verify our token first and then clear it is valid then we create a new token and send it to the user .
-const refreshToken = async (req, res, next) => {
-  const { token } = req.cookies;
-  const cookie = req.cookies.name;
-  if (!cookie === "token" || !token) {
-    return res.status(400).json({ message: "Un-authorized access" });
-  }
-  const decodeToken = jwt.verify(token, "AUTHENTICATIONUSINGJWT", {
-    ignoreExpiration: true,
-  });
-  const loggedInUser = await User.findById(decodeToken.id);
-  res.clearCookie("token");
-  req.cookies.token = null;
-
-  const newToken = jwt.sign(
-    {
-      id: String(loggedInUser._id),
-    },
-    "AUTHENTICATIONUSINGJWT",
-    {
-      expiresIn: "30m", // 30 minutes
-    }
-  );
-  if (newToken) {
-    return refreshJwtToken(
-      { userData: loggedInUser },
-      200,
-      res,
-      "Refresh Token",
-      newToken
-    );
-  } else {
-    res.status(400).json({ message: "Invalid Credentials" });
-  }
-  req.user = loggedInUser;
-  next();
-};
-
-export { isAuthenticated, refreshToken };
+export { isAuthenticated };

@@ -42,9 +42,8 @@ UserSchema.methods.jwtSign = function () {
     },
     "AUTHENTICATIONUSINGJWT",
     {
-      expiresIn: "15m",
-    },
-    
+      expiresIn: "2d",
+    }
   );
 };
 

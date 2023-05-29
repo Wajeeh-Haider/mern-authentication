@@ -18,7 +18,6 @@ const createUser = async (req, res) => {
 
   if (makeUser) {
     await makeUser.save();
-    sendMail(makeUser);
     return res.status(201).json({ message: "Data Entered Successfully" });
   }
   return res
@@ -32,9 +31,6 @@ const Login = async (req, res) => {
   if (!loginUser) {
     return res.status(404).json({ message: "Invalid Credentials" });
   } else {
-    if (loginUser.status === "Pending") {
-      return res.status(400).json({ message: "Verify Your Email" });
-    }
     const isMatch = await bcrypt.compare(password, loginUser.password);
     if (!isMatch) {
       return res.status(406).json({ message: "Please enter correct password" });
@@ -102,12 +98,6 @@ const allData = async (req, res) => {
 };
 
 const Logout = (req, res) => {
-  res.cookie("token", "", {
-    httpOnly: true,
-    expire: new Date(Date.now()),
-  });
-  res.clearCookie("token");
-  req.cookies.token = "";
   res.status(200).json({
     status: true,
     message: "User Logout",
