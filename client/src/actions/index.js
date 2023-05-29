@@ -1,9 +1,15 @@
 import axios from "axios";
 import { toast } from "react-hot-toast";
+const getToken = JSON.parse(localStorage.getItem("state"));
+const token = getToken.loginReducer.userInfo.token;
+
 const instance = axios.create({
   baseURL: "http://127.0.0.1:4000",
   withCredentials: true,
   credentials: "include",
+  headers: {
+    Authorization: `${token}`,
+  },
 });
 
 export const login = () => {
@@ -109,17 +115,6 @@ export const accessToken = () => async (dispatch) => {
       type: "GET_INFO_REQUEST_FAILED",
       payload: error?.response?.status,
     });
-  }
-};
-
-export const getDataAndRefreshToken = () => async (dispatch) => {
-  try {
-    dispatch({ type: "GET_INFO_REQUEST_REFRESH" });
-    const request = await instance.get("/api/refresh");
-    const data = await request.data;
-    dispatch({ type: "GET_INFO_REFRESH_TOKEN", payload: data });
-  } catch (error) {
-    dispatch({ type: "REFRESH_TOKEN_REQUEST_FAILED", payload: error.response });
   }
 };
 

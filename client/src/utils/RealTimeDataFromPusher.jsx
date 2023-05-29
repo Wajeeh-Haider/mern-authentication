@@ -5,7 +5,7 @@ const RealTimeDataFromPusher = () => {
   const [pusherUser, setpusherUser] = React.useState([]);
 
   React.useEffect(() => {
-    const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
+    const pusher = new Pusher("95e4321e5e19afc747e0", {
       cluster: "mt1",
     });
     const channel = pusher.subscribe("updateUser");

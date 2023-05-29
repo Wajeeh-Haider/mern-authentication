@@ -3,7 +3,7 @@ import { Typography, Grid, TextField, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { accessToken, updateProfile } from "../actions";
 
-const UpdateProfile = ({ setOpenUpdateModal, myInfo }) => {
+const UpdateProfile = ({ setOpenUpdateModal }) => {
   const [Input, setInput] = React.useState({
     fullName: "",
     address: "",

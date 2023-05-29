@@ -15,7 +15,6 @@ import ChangePassword from "../components/ChangePassword";
 import { Box } from "@mui/system";
 import UpdateProfile from "../components/UpdateProfile";
 import RealTimeDataFromPusher from "../utils/RealTimeDataFromPusher";
-import getInfoAndRefreshToken from "../utils/getInfoAndRefreshToken";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, logoutUser } from "../actions";
 
@@ -26,16 +25,10 @@ const MyProfile = () => {
   const dispatch = useDispatch();
   const query = useMediaQuery("(min-width:700px)");
   const PusherData = RealTimeDataFromPusher();
-  const refreshAndCurrentData = getInfoAndRefreshToken();
   const myInfo = useSelector((state) => state?.getMyInfoReducer);
-  const refreshInfo = useSelector((state) => state?.refreshTokenReducer);
+  console.log(myInfo.myData);
 
-  if (
-    myInfo.error === 400 ||
-    myInfo.error === 404 ||
-    refreshInfo.error === 400 ||
-    refreshInfo.error === 404
-  ) {
+  if (myInfo.error === 400 || myInfo.error === 404) {
     dispatch(logout());
     dispatch(logoutUser());
     Navigate("/timeout");
@@ -53,9 +46,9 @@ const MyProfile = () => {
     padding: "30px",
   };
   const myData =
-    PusherData.password || PusherData == [] || PusherData.length === 0
-      ? refreshAndCurrentData
-      : PusherData;
+    PusherData == [] || PusherData.length === 0 ? myInfo?.myData : PusherData;
+
+  console.log(myData);
   return (
     <>
       <Container>
@@ -91,12 +84,7 @@ const MyProfile = () => {
             <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
               Address :{myData && myData.address}
             </Typography>
-            <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
-              Email : {refreshAndCurrentData && refreshAndCurrentData.email}
-            </Typography>
-            <Typography component="h2" variant="h5" sx={{ marginTop: "10px" }}>
-              Status : {refreshAndCurrentData && refreshAndCurrentData.status}
-            </Typography>
+
             <Grid container justifyContent={"space-between"}>
               <Grid item>
                 <Button
@@ -146,10 +134,7 @@ const MyProfile = () => {
         >
           <Fade in={openUpdateModal}>
             <Box sx={style}>
-              <UpdateProfile
-                setOpenUpdateModal={setOpenUpdateModal}
-                myInfo={refreshAndCurrentData}
-              />
+              <UpdateProfile setOpenUpdateModal={setOpenUpdateModal} />
             </Box>
           </Fade>
         </Modal>

@@ -5,7 +5,6 @@ import logoutReducer from "./LogoutReducer";
 import signupReducer from "./SignupReducer";
 import loginReducer from "./LoginReducer";
 import getMyInfoReducer from "./MyInfoReducer";
-import refreshTokenReducer from "./TokenReducers";
 import changePasswordRed from "./ChangePasswordReducer";
 import updateProfileReducer from "./UpdateProfileReducer";
 
@@ -15,7 +14,6 @@ const combineAllReducers = combineReducers({
   signupReducer,
   loginReducer,
   getMyInfoReducer,
-  refreshTokenReducer,
   changePasswordRed,
   updateProfileReducer,
 });
