@@ -132,17 +132,13 @@ const SignUp = () => {
               type="submit"
               fullWidth
               variant="contained"
+              color="success"
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up
             </Button>
 
             <Grid container>
-              <Grid item xs>
-                <Link to={"/"} style={{ textDecoration: "none" }}>
-                  <Button variant="outlined">Forgot password?</Button>
-                </Link>
-              </Grid>
               <Grid item>
                 <Link to="/" style={{ textDecoration: "none" }}>
                   <Button variant="outlined">

@@ -1,6 +1,5 @@
 import User from "../models/UserModels.js";
 import sendJWT from "../utils/SendJWT.js";
-import sendMail from "../utils/SendMail.js";
 import bcrypt from "bcryptjs";
 
 const createUser = async (req, res) => {
@@ -70,14 +69,14 @@ const changePassword = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const id = req.user.id;
+    const { id } = req.user;
     const { fullName, address } = req.body;
     const user = await User.findByIdAndUpdate(id, {
       fullName,
       address,
     });
     if (user) {
-      res.status(200).json({ message: "Profile Updated Successfully" });
+      res.status(200).json({ message: "Profile Updated Successfully", user });
     }
   } catch (err) {
     return res.status(400).json({ message: "Cannot Update Profile", err });

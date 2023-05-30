@@ -36,15 +36,9 @@ UserSchema.pre("save", async function (next) {
 });
 
 UserSchema.methods.jwtSign = function () {
-  return jwt.sign(
-    {
-      id: this._id,
-    },
-    "AUTHENTICATIONUSINGJWT",
-    {
-      expiresIn: "2d",
-    }
-  );
+  return jwt.sign({ id: this._id }, "AUTHENTICATIONUSINGJWT", {
+    expiresIn: "2d",
+  });
 };
 
 const User = mongoose.model("Users", UserSchema);

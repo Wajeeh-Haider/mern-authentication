@@ -65,7 +65,10 @@ const SignIn = () => {
               src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8bGFwdG9wfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
               alt="Image"
               width="100%"
-              style={{ borderRadius: "10px" }}
+              style={{
+                borderRadius: "10px",
+                boxShadow: " 0 0 10px rgba(0,0,0,0.5)",
+              }}
             />
           </Grid>
           <Grid
@@ -101,7 +104,9 @@ const SignIn = () => {
               type="submit"
               fullWidth
               variant="contained"
+              color="success"
               sx={{ mt: 3, mb: 2 }}
+              style={{ fontWeight: "bolder" }}
             >
               Sign In
             </Button>
@@ -114,22 +119,15 @@ const SignIn = () => {
                 item
                 sx={{
                   marginTop: !matches ? "20px" : "0px",
-                  marginRight: !matches ? "10px" : "0px",
-                }}
-              >
-                <Button variant="outlined" onClick={forgetPassword}>
-                  Forgot password?
-                </Button>
-              </Grid>
-              <Grid
-                item
-                sx={{
-                  marginTop: !matches ? "20px" : "0px",
                   marginLeft: !matches ? "10px" : "0px",
                 }}
               >
                 <Link to="/sign-up" style={{ textDecoration: "none" }}>
-                  <Button variant="outlined" size={!query ? "small" : ""}>
+                  <Button
+                    variant="outlined"
+                    color="success"
+                    size={!query ? "small" : ""}
+                  >
                     {"Don't have an account? Sign Up"}
                   </Button>
                 </Link>

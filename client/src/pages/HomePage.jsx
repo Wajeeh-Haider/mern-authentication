@@ -17,7 +17,6 @@ const HomePage = () => {
   }
   return (
     <>
-      <MainHero />
       <Cards />
     </>
   );

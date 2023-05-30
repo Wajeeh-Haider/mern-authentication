@@ -15,7 +15,7 @@ import { logout, logoutUser } from "../actions/index";
 import FeedIcon from "@mui/icons-material/Feed";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
-export default function Navbar() {
+export default function Navbar() {  
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const dispatch = useDispatch();
@@ -37,7 +37,14 @@ export default function Navbar() {
       <CssBaseline />
       <AppBar
         position="relative"
-        style={{ position: "relative", top: 0, left: 0, margin: 0, zIndex: 1 }}
+        style={{
+          position: "relative",
+          top: 0,
+          left: 0,
+          margin: 0,
+          zIndex: 1,
+          backgroundColor: "green",
+        }}
       >
         <Toolbar>
           <IconButton size="large" color="inherit">
@@ -45,13 +52,10 @@ export default function Navbar() {
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
-              Mern Auth
+              HOP Attendance Portal
             </Link>
           </Typography>
 
-          {/* <Button color="inherit" onClick={logoutRequest}>
-            Logout
-          </Button> */}
           <div>
             <IconButton
               size="large"

@@ -14,9 +14,8 @@ import {
 import ChangePassword from "../components/ChangePassword";
 import { Box } from "@mui/system";
 import UpdateProfile from "../components/UpdateProfile";
-import RealTimeDataFromPusher from "../utils/RealTimeDataFromPusher";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, logoutUser } from "../actions";
+import { accessToken, logout, logoutUser } from "../actions";
 
 const MyProfile = () => {
   const [open, setOpen] = React.useState(false);
@@ -24,11 +23,10 @@ const MyProfile = () => {
   const Navigate = useNavigate();
   const dispatch = useDispatch();
   const query = useMediaQuery("(min-width:700px)");
-  const PusherData = RealTimeDataFromPusher();
-  const myInfo = useSelector((state) => state?.getMyInfoReducer);
-  console.log(myInfo.myData);
+  const userInfo = useSelector((state) => state?.getMyInfoReducer);
+  const { myData } = userInfo;
 
-  if (myInfo.error === 400 || myInfo.error === 404) {
+  if (userInfo?.error === 400 || userInfo?.error === 404) {
     dispatch(logout());
     dispatch(logoutUser());
     Navigate("/timeout");
@@ -45,10 +43,11 @@ const MyProfile = () => {
     width: !query ? "90%" : "50%",
     padding: "30px",
   };
-  const myData =
-    PusherData == [] || PusherData.length === 0 ? myInfo?.myData : PusherData;
 
-  console.log(myData);
+  React.useEffect(() => {
+    dispatch(accessToken());
+  }, [dispatch]);
+
   return (
     <>
       <Container>

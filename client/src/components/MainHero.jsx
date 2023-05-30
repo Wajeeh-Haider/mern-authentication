@@ -6,27 +6,15 @@ const MainHero = ({ myData }) => {
     <>
       <main>
         <div>
-          <Container
-            maxWidth="xs"
-            style={{ marginTop: "100px", marginBottom: "50px" }}
-          >
-            <Typography variant="h4" align="center" gutterBottom>
-              {myData && myData.fullName}
-            </Typography>
-            <Typography
-              variant="h5"
-              align="center"
-              color="textSecondary"
-              paragraph
-            >
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            </Typography>
-            <Grid container spacing={4} justifyContent="center">
-              <Grid item>
-                <Button variant="contained">Hello There</Button>
-              </Grid>
-              <Grid item>
-                <Button variant="outlined">Hi There</Button>
+          <Container style={{ marginTop: "100px" }}>
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item xs={12} sm={6} textAlign={"center"}>
+                <Typography variant="h3" component="h1" gutterBottom>
+                  House of Professionals
+                </Typography>
+                <Typography variant="h5" component="h2" gutterBottom>
+                  We are a team of talented professionals making your life
+                </Typography>
               </Grid>
             </Grid>
           </Container>

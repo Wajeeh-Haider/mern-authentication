@@ -10,7 +10,7 @@ import {
   changePassword,
   updateProfile,
 } from "../controllers/UserControllers.js";
-import { isAuthenticated } from "../middleware/auth.js";
+import isAuthenticated from "../middleware/auth.js";
 
 UserRoute.post("/create/user", createUser);
 UserRoute.post("/login", Login);
